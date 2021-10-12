@@ -1,0 +1,12 @@
+---
+version: '3.5'
+services:
+  nginx:
+    container_name: nginx-50x-auto-chrome-dino
+    build:
+      context: .
+    volumes:
+      - ./custom_50x.html:/usr/share/nginx/html/custom_50x.html
+    ports:
+      - "9000:80"
+    command: [nginx-debug, '-g', 'daemon off;']
