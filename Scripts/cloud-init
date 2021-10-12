@@ -23,11 +23,11 @@ bootcmd:
 #    partition: sda1
 
 runcmd:
-  - mkdir -p /DataDisk/logs/access, /DataDisk/logs/Error, /run/stage
   - EBS_DEVICE=( $(lsblk | grep -e disk | awk '{sub("G","",$4)} {if ($4+0 > 20) print $1}') )
   - mkfs -t ext4 /dev/"${EBS_DEVICE}"
   - mount /dev/"${EBS_DEVICE}" /DataDisk/
   - echo -e "\"UUID=\"$(lsblk -o +uuid /dev/"${EBS_DEVICE}" | grep "${EBS_DEVICE}" | awk '{print $8}')\" \t /DataDisk \t ext4 \t defaults \t 0 \t 0\"" >> /etc/fstab
+  - mkdir -p /DataDisk/nginx/access /DataDisk/error /run/stage
   - sudo apt update 
   - apt install nginx wget curl -y 
   - apt autoclean 
