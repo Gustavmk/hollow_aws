@@ -23,26 +23,24 @@ bootcmd:
 #    partition: sda1
 
 runcmd:
+  - mkdir /DataDisk
   - EBS_DEVICE=( $(lsblk | grep -e disk | awk '{sub("G","",$4)} {if ($4+0 > 20) print $1}') )
   - mkfs -t ext4 /dev/"${EBS_DEVICE}"
   - mount /dev/"${EBS_DEVICE}" /DataDisk/
   - echo -e "\"UUID=\"$(lsblk -o +uuid /dev/"${EBS_DEVICE}" | grep "${EBS_DEVICE}" | awk '{print $8}')\" \t /DataDisk \t ext4 \t defaults \t 0 \t 0\"" >> /etc/fstab
-  - mkdir -p /DataDisk/nginx/access /DataDisk/error /run/stage
+  - mkdir -p /DataDisk/nginx/access /DataDisk/nginx/error /run/stage
   - sudo apt update 
   - apt install nginx wget curl -y 
   - apt autoclean 
   - wget -O /run/stage/index.html https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/index.html
   - wget -O /run/stage/custom_50x.html https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/custom_50x.html 
   - wget -O /run/stage/default.conf https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/default.conf
+  - rm /etc/nginx/sites-available/default
   - mv /run/stage/default.conf /etc/nginx/sites-enabled/default
   - mv /run/stage/custom_50x.html /usr/share/nginx/html/custom_50x.html
   - mv /run/stage/index.html  /usr/share/nginx/html 
-  - systemctl reload nginx
+  - systemctl restart nginx
  
-mounts:
-  - ["/dev/xvdf", "/mnt/logs"]
-
-
 final_message: "The system is finally up, after $UPTIME seconds"
 
 # LOG: /var/log/cloud-init.log
