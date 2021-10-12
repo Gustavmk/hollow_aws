@@ -12,3 +12,16 @@ resource "aws_instance" "web" {
   
  }
 
+# ref: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_volume
+resource "aws_ebs_volume" "web_vol_generic_data" {
+  availability_zone = aws_instance.web.availability_zone
+  size              = 30
+  type              = "gp2"
+}
+
+# ref: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/volume_attachment
+resource "aws_volume_attachment" "web_generic_data_vol_att" {
+  device_name = "/dev/sdf"
+  volume_id   = aws_ebs_volume.web_vol_generic_data.id
+  instance_id = aws_instance.web.id
+}

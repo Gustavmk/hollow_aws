@@ -17,14 +17,11 @@
 
 # Next steps
 - Create packer image alternative to Cloud-init
+- Ship the logs to CloudWatch
 
 
 # Running
 
-$ terraform init
-$ terraform plan --out=tfplan --var-file='variables.tfvars'
-$ terraform apply --auto-approve --var-file='variables.tfvars'
-
-
-# access
-ssh -i FILE.pem ec2-web-mgmt-access@IP
+- terraform init
+- terraform plan --out=tfplan --var-file='variables.tfvars'
+- terraform apply --auto-approve --var-file='variables.tfvars'
