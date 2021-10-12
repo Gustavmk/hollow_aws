@@ -1,0 +1,10 @@
+# Terraform
+*.tfstate
+*.tfvars
+*.exe
+.terraform
+*.lock.hcl
+*.tfplan
+*.tfstate.backup
+
+*.pem

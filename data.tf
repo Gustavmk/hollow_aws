@@ -6,25 +6,16 @@ data "aws_availability_zones" "available" {
 
 data "aws_ami" "aws-linux" {
   most_recent = true
-  owners      = ["amazon"]
+  owners = ["099720109477"] # Canonical
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
+ filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-}
 
-# EC2 - Cloud-Init 
-data "template_file" "cloud-init-ec2" {
-  template = file("./Scripts/cloud-init.yml")
 }
