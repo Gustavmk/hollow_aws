@@ -1,4 +1,5 @@
 # infraestrutura requisitada
+
 - Criar uma máquina Virtual, com um ip público
 - Expor os protocolos HTTP e HTTP/S
 - Instalar um servidor web NGINX.
@@ -7,20 +8,20 @@
 - Criar um storage
 - Enviar o log do NGINX para o storage criado.
 
-# About infrastructure
+## About infrastructure
 
 - Use the tfvars localy to access programatic to cloud
 - Init on local state file
-- Create network 
-- Create EC2 instance with SSH key authentication 
-- EC2 access private key on AWS Secret 
+- Create network
+- Create EC2 instance with SSH key authentication
+- EC2 access private key on AWS Secret
 
-# Next steps
+### Next steps
+
 - Create packer image alternative to Cloud-init
 - Ship the logs to CloudWatch
 
-
-# Running
+#### Running
 
 - terraform init
 - terraform plan --out=tfplan --var-file='variables.tfvars'

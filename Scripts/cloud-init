@@ -9,7 +9,7 @@ package_upgrade: true
 # - curl
 
 disk_setup:
-  /dev/sdf:
+  /dev/xvdf:
     LOGS:
       table_type: 'mbr'
       layout: 
@@ -19,13 +19,13 @@ disk_setup:
 fs_setup:
   - label: logs
     filesystem: 'ext4'
-    device: /dev/sdf
+    device: /dev/xvdf
     partition: sda1
 
 runcmd:
-  - [ partx, --update, /dev/sdf ]
-  - [ partprobe ]
-  - mkdir /mnt/logs
+  - partx --update /dev/xvdf
+  - partprobe 
+  - mkdir -p /mnt/logs /test/access /test/error
   - mkdir /run/stage
   - sudo apt update 
   - apt install nginx wget curl -y 
@@ -39,9 +39,9 @@ runcmd:
   - systemctl reload nginx
  
 mounts:
-  - ["/dev/sdf", "/mnt/logs"]
+  - ["/dev/xvdf", "/mnt/logs"]
 
 
- final_message: "The system is finally up, after $UPTIME seconds"
+final_message: "The system is finally up, after $UPTIME seconds"
 
 # LOG: /var/log/cloud-init.log
