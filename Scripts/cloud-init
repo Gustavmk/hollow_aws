@@ -1,32 +1,33 @@
 #cloud-config
-#!
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
+
 package_update: true
 package_upgrade: true
 
-#packages:
-# - nginx
-# - wget
-# - curl
 
-disk_setup:
-  /dev/xvdf:
-    LOGS:
-      table_type: 'mbr'
-      layout: 
-        - 100
-      overwrite: False
+bootcmd:
+  - ln -sf bash /bin/sh
 
-fs_setup:
-  - label: logs
-    filesystem: 'ext4'
-    device: /dev/xvdf
-    partition: sda1
+#disk_setup:
+#  /dev/xvdf:
+#    LOGS:
+#      table_type: 'mbr'
+#      layout: 
+#        - 100
+#      overwrite: False
+#
+#fs_setup:
+#  - label: logs
+#    filesystem: 'ext4'
+#    device: /dev/xvdf
+#    partition: sda1
 
 runcmd:
-  - partx --update /dev/xvdf
-  - partprobe 
-  - mkdir -p /mnt/logs /test/access /test/error
-  - mkdir /run/stage
+  - mkdir -p /DataDisk/logs/access, /DataDisk/logs/Error, /run/stage
+  - EBS_DEVICE=( $(lsblk | grep -e disk | awk '{sub("G","",$4)} {if ($4+0 > 20) print $1}') )
+  - mkfs -t ext4 /dev/"${EBS_DEVICE}"
+  - mount /dev/"${EBS_DEVICE}" /DataDisk/
+  - echo -e "\"UUID=\"$(lsblk -o +uuid /dev/"${EBS_DEVICE}" | grep "${EBS_DEVICE}" | awk '{print $8}')\" \t /DataDisk \t ext4 \t defaults \t 0 \t 0\"" >> /etc/fstab
   - sudo apt update 
   - apt install nginx wget curl -y 
   - apt autoclean 
