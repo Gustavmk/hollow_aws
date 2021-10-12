@@ -25,3 +25,5 @@ resource "aws_volume_attachment" "web_generic_data_vol_att" {
   volume_id   = aws_ebs_volume.web_vol_generic_data.id
   instance_id = aws_instance.web.id
 }
+
+# AWS EBS Device Name REF: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html

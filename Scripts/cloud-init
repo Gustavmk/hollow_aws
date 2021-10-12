@@ -8,20 +8,40 @@ package_upgrade: true
 # - wget
 # - curl
 
+disk_setup:
+  /dev/sdf:
+    LOGS:
+      table_type: 'mbr'
+      layout: 
+        - 100
+      overwrite: False
+
+fs_setup:
+  - label: logs
+    filesystem: 'ext4'
+    device: /dev/sdf
+    partition: sda1
 
 runcmd:
- - mkdir /run/stage
- - sudo apt update 
- - apt install nginx wget curl -y 
- - apt autoclean 
- - wget -O /run/stage/index.html https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/index.html
- - wget -O /run/stage/custom_50x.html https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/custom_50x.html 
- - wget -O /run/stage/default.conf https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/default.conf
- - mv /run/stage/default.conf /etc/nginx/sites-enabled/default
- - mv /run/stage/custom_50x.html /usr/share/nginx/html/custom_50x.html
- - mv /run/stage/index.html  /usr/share/nginx/html 
- - systemctl reload nginx
+  - [ partx, --update, /dev/sdf ]
+  - [ partprobe ]
+  - mkdir /mnt/logs
+  - mkdir /run/stage
+  - sudo apt update 
+  - apt install nginx wget curl -y 
+  - apt autoclean 
+  - wget -O /run/stage/index.html https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/index.html
+  - wget -O /run/stage/custom_50x.html https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/custom_50x.html 
+  - wget -O /run/stage/default.conf https://raw.githubusercontent.com/gustavmk/hollow_aws/main/nginx/default.conf
+  - mv /run/stage/default.conf /etc/nginx/sites-enabled/default
+  - mv /run/stage/custom_50x.html /usr/share/nginx/html/custom_50x.html
+  - mv /run/stage/index.html  /usr/share/nginx/html 
+  - systemctl reload nginx
  
-final_message: "The system is finally up, after $UPTIME seconds"
+mounts:
+  - ["/dev/sdf", "/mnt/logs"]
+
+
+ final_message: "The system is finally up, after $UPTIME seconds"
 
 # LOG: /var/log/cloud-init.log
