@@ -9,3 +9,7 @@
 *terraform.tfstate.backup
 *.pem
 terraform.tfstate.backup
+
+# go
+*.mod
+*.sum

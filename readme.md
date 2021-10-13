@@ -26,3 +26,10 @@
 - terraform init
 - terraform plan --out=tfplan --var-file='variables.tfvars'
 - terraform apply --auto-approve --var-file='variables.tfvars'
+
+##### test
+
+- go mod init "github.com/gruntwork-io/terratest/modules/http-helper"
+- go mod init
+- go mod tidy
+- go test -v -run TestTerraformEC2 -timeout 30m
