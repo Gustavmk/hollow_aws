@@ -3,6 +3,7 @@
 resource "aws_vpc" "vpc-gmkgo" {
   cidr_block = var.vpc_cidr
   enable_dns_hostnames = "true"
+
 }
 
 # SUBNET
@@ -25,6 +26,18 @@ resource "aws_route_table" "rt-web" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
+}
+
+# Route Table Association
+resource "aws_main_route_table_association" "a" {
+  vpc_id         = aws_vpc.vpc-gmkgo.id
+  route_table_id = aws_route_table.rt-web.id
+
+  depends_on = [
+    aws_route_table.rt-web,
+    aws_vpc.vpc-gmkgo
+  ]
+
 }
 
 

@@ -39,7 +39,7 @@ runcmd:
   - mv /run/stage/default.conf /etc/nginx/sites-enabled/default
   - mv /run/stage/custom_50x.html /usr/share/nginx/html/custom_50x.html
   - mv /run/stage/index.html  /usr/share/nginx/html 
-  - mkdir -p /etc/nginx/ssl
+  - mkdir /etc/nginx/ssl
   - openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -subj '/CN=ec2horseextreme/O=Unknown Corp SA./C=BR'
   - systemctl restart nginx
 
